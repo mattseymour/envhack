@@ -1,23 +1,13 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <script type="text/javascript" src="http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/openspace.js?key=43659536296237352656577659934363">
-        </script>
-    </head>
-    <body onload="init();">
-        <script>
-            var osMap;
-            function init()
-            {
-                osMap = new OpenSpace.Map('map');
-                osMap.setCenter(new OpenSpace.MapPoint(438760, 114760), 10);
-                var markers = new OpenLayers.Layer.Markers("Markers");
-                osMap.addLayer(markers);
-                var pos = new OpenSpace.MapPoint(438760, 114760);
-                var marker = new OpenLayers.Marker(pos);
-                markers.addMarker(marker);
-            }
-        </script>
-        <div id="map" style="width:80%; height: 80%; border: 1px solid black;">
-        </div>
-    </body>
+<head>
+    <link rel="stylesheet" href="front.css" />
+    <script src="jquery/jquery-1.8.3.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <div id="report"><a href="report.html">Report a pollution incident</a></div>
+        <div id="view"><a href="view.html">View existing incidents</a></div>
+    </div>
+</body>
 </html>

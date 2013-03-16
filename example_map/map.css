@@ -1,27 +1,27 @@
 html, body {
-	margin: 0;
-	padding: 0;
-    height: 100%;
+
+}
+
+#world {
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #map {
-	height: 100%;
-    width: 50%;
-	float: left;
+	height: 400px;
+    width: 700px;
 }
 
 #content {
-	float: right;
-    width: auto;
-    padding: 20px 50px;
-    text-align: right;
+    margin-bottom: 30px;
 }
 
 h1 {
-    font-family: "Titillium Web", sans-serif;
+    font-family: sans-serif;
 }
 
-h1 span {
+.hack {
     color: #a9e100;
 }
 
@@ -29,7 +29,19 @@ h1 span {
     padding-top: 50px;
 }
 
-input {
-    font-size: 14px;
-    padding: 5px;
+h2 {
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+.incident {
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    height: 80px;
+}
+
+.vote {
+    float: right;
+    width: 50px;
+    height: 50px;
 }

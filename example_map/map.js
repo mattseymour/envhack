@@ -12,10 +12,10 @@ $(document).ready(function() {
 
     // icons
     var size = new OpenLayers.Size(33,45);
-    var icon_yellow = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_yellow.png', size);
     var icon_blue = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_blue.png', size);
-    var icon_red = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_red.png', size);
     var icon_green = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_green.png', size);
+    var icon_yellow = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_yellow.png', size);
+    var icon_red = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_red.png', size);
 
     for(n=0; n<fc.features.length;n++) {
         // add a new marker
@@ -35,7 +35,13 @@ $(document).ready(function() {
 
         // onclick method for markers
         marker.events.register('click', marker, function (e) {
-            $('#query')[0].innerHTML = 'fid: ' + e.object.fid + '<br />easting: ' + e.object.lonlat.lon + '<br />northing: ' + e.object.lonlat.lat + '<br />date: ' + fc.features[e.object.fid].properties['NOT_DATE'] + '<br />category: ' + fc.features[e.object.fid].properties['EIL_WATER'];
+            //$('#query')[0].innerHTML = 'fid: ' + e.object.fid + '<br />easting: ' + e.object.lonlat.lon + '<br />northing: ' + e.object.lonlat.lat + '<br />date: ' + fc.features[e.object.fid].properties['NOT_DATE'] + '<br />category: ' + fc.features[e.object.fid].properties['EIL_WATER'];
+            $('#content').fadeOut(250, function() {
+                $('#query_fid')[0].innerHTML = e.object.fid;
+                $('#query_date')[0].innerHTML = fc.features[e.object.fid].properties['NOT_DATE'];
+                $('#query_severity')[0].innerHTML = fc.features[e.object.fid].properties['EIL_WATER'];
+                $('#content').fadeIn(250);
+            });
             OpenLayers.Event.stop(e);
         });
     }

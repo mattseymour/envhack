@@ -1,0 +1,35 @@
+html, body {
+	margin: 0;
+	padding: 0;
+    height: 100%;
+}
+
+#map {
+	height: 100%;
+    width: 50%;
+	float: left;
+}
+
+#content {
+	float: right;
+    width: auto;
+    padding: 20px 50px;
+    text-align: right;
+}
+
+h1 {
+    font-family: "Titillium Web", sans-serif;
+}
+
+h1 span {
+    color: #a9e100;
+}
+
+#report {
+    padding-top: 50px;
+}
+
+input {
+    font-size: 14px;
+    padding: 5px;
+}

@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <script type="text/javascript" src="http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=43659536296237352656577659934363">
+        </script>
+    </head>
+    <body onload="init();">
+        <script>
+            var osMap;
+            function init()
+            {
+                osMap = new OpenSpace.Map('map');
+                osMap.setCenter(new OpenSpace.MapPoint(438760, 114760), 10);
+                var markers = new OpenLayers.Layer.Markers("Markers");
+                osMap.addLayer(markers);
+                var pos = new OpenSpace.MapPoint(438760, 114760);
+                var marker = new OpenLayers.Marker(pos);
+                markers.addMarker(marker);
+            }
+        </script>
+        <div id="map" style="width:80%; height: 80%; border: 1px solid black;">
+        </div>
+    </body>
+</html>

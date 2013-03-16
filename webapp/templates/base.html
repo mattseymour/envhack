@@ -1,12 +1,31 @@
+<!DOCTYPE html>
 <html>
     <head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+        <link href="{{STATIC_URL}}css/bootstrap.css" rel="Stylesheet" type="text/css"/>
+        <link href="{{STATIC_URL}}css/style.css" rel="Stylesheet" type="text/css"/>
         {% block header %}
             
         {% endblock header %}
     </head>
     <body>
-        {% block content %}
+        <header>
+            <div class="content">
+                <div class="row">
+                    <div class="span4">
+                        <h5>Env:[Hack]</h5>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="content">
+                <div class="row">
+                {% block content %}
 
-        {% endblock content %}
+                {% endblock content %}
+                </div>
+            </div>
+        </section>
     </body>
 </html>

@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = patterns('',
@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^view/$', 'app.views.view', name='view'),
     url(r'^import/$', 'app.views.importer', name='import'),
     url(r'^random/$', 'app.views.random', name='random'),
+    url(r'^thanks/$', 'app.views.thanks', name='thanks'),
     # url(r'^webapp/', include('webapp.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

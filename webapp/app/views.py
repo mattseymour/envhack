@@ -24,7 +24,7 @@ def submission(request):
         report_form = ReportForm(request.POST, request.FILES)
         if report_form.is_valid():
             obj = report_form.save()
-            return redirect('/thanks/?redirect=true')
+            return redirect('/thanks/')
 
     return render_to_response('home/submission.html', 
                         { 'form':report_form }, 

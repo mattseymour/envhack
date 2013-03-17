@@ -118,10 +118,26 @@ function processLocation(location) {
     var gridProjection = new OpenSpace.GridProjection();
     var lonlat = new OpenLayers.LonLat(location.coords.longitude, location.coords.latitude);
     var markerLayer = map.getMarkerLayer();
-    var marker = new OpenLayers.Marker(gridProjection.getMapPointFromLonLat(lonlat));
+    var mapPoint = gridProjection.getMapPointFromLonLat(lonlat);
+    var marker = new OpenLayers.Marker(mapPoint);
     marker.events.register('click', marker, removeMarkerClick);
     markers.push(marker);
     markerLayer.addMarker(marker);
+
+
+        // add user submitted incidents
+        $.getJSON('/data/', function(data) {
+            for(n=0;n<data.length;n++) {
+                var t = 100;
+                if (Math.abs(mapPoint.getEasting() - data[n].x) < t && Math.abs(mapPoint.getNorthing() - data[n].y) < t) {
+                     $('#existingitems').fadeIn(250, function() {
+                        $('#existingitems')[0].innerHTML = 'There are recently reported incidents nearby. If this is the same problem, please help us by adding a vote';
+                        //$('#content').fadeIn(250);
+                    });
+                }
+            }
+        });
+
     //alert(location.coords.latitude);
     //alert(location.coords.longitude);
     //alert(location.coords.accuracy);

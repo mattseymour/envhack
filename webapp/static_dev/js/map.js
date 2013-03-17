@@ -7,6 +7,8 @@ var markers = [];
 var gridProjection = new OpenSpace.GridProjection();
 var markersLayer;
 
+var user_submitted_data = [];
+
 try {
     if (page) {}
 } catch(e) {
@@ -24,6 +26,7 @@ $(document).ready(function() {
     map.addLayer(markers_layer);
 
     if (page == 'report') {
+	map.setCenter(envhack, 7);
         map.events.remove('dblclick');
         map.events.register("movestart", this, this.setMapDrag);
         map.events.register("dblclick", this, addMarker);
@@ -34,6 +37,10 @@ $(document).ready(function() {
 
         markersLayer = map.getMarkerLayer();
 
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(processLocation);
+        }
+
         // // submit report overlay
         // screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
         // screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
@@ -41,6 +48,8 @@ $(document).ready(function() {
         // screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker.</div>");
 
     } else if(page == 'view') {
+
+        // add existing incidents
 
         // icons
         var size = new OpenLayers.Size(33,45);
@@ -73,6 +82,7 @@ $(document).ready(function() {
                         $('#query_fid')[0].innerHTML = 'Report for incident number ' + e.object.fid + '.';
                         $('#query_date')[0].innerHTML = 'Incident reported on ' + fc.features[e.object.fid].properties['NOT_DATE'] + '.';
                         $('#query_severity')[0].innerHTML = 'This incident was classified as ' + fc.features[e.object.fid].properties['EIL_WATER'] + '.';
+                        $('#query_vote')[0].innerHTML = '';
                         $('#content').fadeIn(250);
                     });
                     OpenLayers.Event.stop(e);
@@ -80,7 +90,45 @@ $(document).ready(function() {
             }
         }
     }
+
+    // add user submitted incidents
+    $.getJSON('/data/', function(data) {
+        user_submitted_data = data;
+        var size = new OpenLayers.Size(33,45);
+        var icon_grey = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_grey.png', size);
+        for(n=0;n<data.length;n++) {
+            ico = icon_grey.clone();
+            marker = new OpenLayers.Marker(new OpenSpace.MapPoint(data[n].x,data[n].y),ico);
+            marker.fid = n;
+            markers_layer.addMarker(marker);
+
+            // onclick method for markers
+                marker.events.register('click', marker, function (e) {
+                    $('#content').fadeOut(250, function() {
+                        $('#query_fid')[0].innerHTML = 'User submitted report number ' + e.object.fid + '.';
+                        $('#query_date')[0].innerHTML = 'Incident reported on ' + user_submitted_data[e.object.fid]['date'] + '.';
+                        $('#query_severity')[0].innerHTML = '';
+                        $('#query_vote')[0].innerHTML = '<a href="#" class="voter">Vote for this incident.';
+                        $('#content').fadeIn(250);
+                    });
+                    OpenLayers.Event.stop(e);
+                });
+        }
+    });
 });
+
+function processLocation(location) {
+    var gridProjection = new OpenSpace.GridProjection();
+    var lonlat = new OpenLayers.LonLat(location.coords.longitude, location.coords.latitude);
+    var markerLayer = map.getMarkerLayer();
+    var marker = new OpenLayers.Marker(gridProjection.getMapPointFromLonLat(lonlat));
+    marker.events.register('click', marker, removeMarkerClick);
+    markers.push(marker);
+    markerLayer.addMarker(marker);
+    //alert(location.coords.latitude);
+    //alert(location.coords.longitude);
+    //alert(location.coords.accuracy);
+}
 
 function addMarker(evt) {
     if (!drag_flag) {

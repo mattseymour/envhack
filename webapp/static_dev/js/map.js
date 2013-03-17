@@ -26,6 +26,7 @@ $(document).ready(function() {
     map.addLayer(markers_layer);
 
     if (page == 'report') {
+	map.setCenter(envhack, 7);
         map.events.remove('dblclick');
         map.events.register("movestart", this, this.setMapDrag);
         map.events.register("dblclick", this, addMarker);
@@ -35,6 +36,10 @@ $(document).ready(function() {
         map.addControl(dragControl);
 
         markersLayer = map.getMarkerLayer();
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(processLocation);
+        }
 
         // // submit report overlay
         // screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
@@ -108,6 +113,19 @@ $(document).ready(function() {
         });
     }
 });
+
+function processLocation(location) {
+    var gridProjection = new OpenSpace.GridProjection();
+    var lonlat = new OpenLayers.LonLat(location.coords.longitude, location.coords.latitude);
+    var markerLayer = map.getMarkerLayer();
+    var marker = new OpenLayers.Marker(gridProjection.getMapPointFromLonLat(lonlat));
+    marker.events.register('click', marker, removeMarkerClick);
+    markers.push(marker);
+    markerLayer.addMarker(marker);
+    //alert(location.coords.latitude);
+    //alert(location.coords.longitude);
+    //alert(location.coords.accuracy);
+}
 
 function addMarker(evt) {
     if (!drag_flag) {

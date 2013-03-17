@@ -10,6 +10,10 @@ import json
 class GeoJson:
     pass
 
+def recent(request):
+    _recent = Report.objects.all().orderby('-submission_date')[:15]
+    return render_to_response('home/recent.html', {'recent': _recent}, context_instance=RequestContext(request))
+
 def thanks(request):
     return render_to_response('home/thanks.html', {}, context_instance=RequestContext(request))
 
@@ -54,7 +58,7 @@ def data(request):
     _list = Report.objects.all()[:100]
     _l = []
     for i in _list:
-         j = {'wildlife':i.danger_wildlife, 'boat': i.danger_boat, 'human':i.danger_person ,'description':i.description,'report_type':i.report_type, 'y':i.report_northing, 'x':i.report_easting}
+         j = {'date':i.submission_date.strftime('%Y-%m-%d'),'wildlife':i.danger_wildlife, 'boat': i.danger_boat, 'human':i.danger_person ,'description':i.description,'report_type':i.report_type, 'y':i.report_northing, 'x':i.report_easting}
          _l.append(j)
     return HttpResponse(json.dumps(_l), mimetype='application/json')
 

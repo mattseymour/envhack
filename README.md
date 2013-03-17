@@ -3,7 +3,7 @@ envhack
 
 Envhack Code for Waterwatch
 
-API key = 43659536296237352656577659934363
+API key is required for the OS OpenSpace maps used in the application.
 
 Staci Lattimer
 

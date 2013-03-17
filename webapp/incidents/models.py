@@ -17,6 +17,7 @@ class Report(models.Model):
     report_northing = models.IntegerField()
     report_easting = models.IntegerField()
     photo = models.ImageField(upload_to=os.path.join('media'))
+    waterway_name = models.EmailField(max_length=100)
 
     def __unicode__(self):
         return '{0} on {1}'.format(self.reporter_name, self.submission_date)

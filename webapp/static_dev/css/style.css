@@ -1,3 +1,8 @@
 .hack {
     color: #a9e100;
 }
+
+#map {
+	height: 400px;
+	width: 700px;
+}

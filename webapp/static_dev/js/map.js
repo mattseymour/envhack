@@ -7,6 +7,8 @@ var markers = [];
 var gridProjection = new OpenSpace.GridProjection();
 var markersLayer;
 
+var user_submitted_data = [];
+
 try {
     if (page) {}
 } catch(e) {
@@ -41,6 +43,8 @@ $(document).ready(function() {
         // screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker.</div>");
 
     } else if(page == 'view') {
+
+        // add existing incidents
 
         // icons
         var size = new OpenLayers.Size(33,45);
@@ -79,6 +83,29 @@ $(document).ready(function() {
                 });
             }
         }
+
+        // add user submitted incidents
+        $.getJSON('/data/', function(data) {
+            user_submitted_data = data;
+            var icon_grey = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_grey.png', size);
+            for(n=0;n<data.length;n++) {
+                ico = icon_grey.clone();
+                marker = new OpenLayers.Marker(new OpenSpace.MapPoint(data[n].x,data[n].y),ico);
+                marker.fid = n;
+                markers_layer.addMarker(marker);
+
+                // onclick method for markers
+                marker.events.register('click', marker, function (e) {
+                    $('#content').fadeOut(250, function() {
+                        $('#query_fid')[0].innerHTML = 'Report for incident number ' + e.object.fid + '.';
+                        $('#query_date')[0].innerHTML = 'Incident reported on ' + user_submitted_data[e.object.fid]['date'] + '.';
+                        $('#query_severity')[0].innerHTML = '';
+                        $('#content').fadeIn(250);
+                    });
+                    OpenLayers.Event.stop(e);
+                });
+            }
+        });
     }
 });
 

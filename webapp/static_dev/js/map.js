@@ -1,5 +1,12 @@
 var map;
 
+var drag_flag = 0;
+var map_dragged_flag = 0;
+var marker_delete_flag = 0;
+var markers = [];
+var gridProjection = new OpenSpace.GridProjection();
+var markersLayer;
+
 $(document).ready(function() {
     // create the map, and zoom to envhack
 	map = new OpenSpace.Map('map');
@@ -9,6 +16,22 @@ $(document).ready(function() {
     // create a new layer for the markers
     markers_layer = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(markers_layer);
+
+    map.events.remove('dblclick');
+    map.events.register("movestart", this, this.setMapDrag);
+    map.events.register("dblclick", this, addMarker);
+    map.events.register("touchend", this, this.touchAddMarker);
+
+    dragControl = new OpenSpace.Control.DragMarkers(markersLayer);
+    map.addControl(dragControl);
+
+    markersLayer = map.getMarkerLayer();
+
+    // submit report overlay
+    screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
+    screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
+    map.addLayer(screenOverlay);
+    screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker identifying the pollution location.</div>");
 
     // icons
     var size = new OpenLayers.Size(33,45);
@@ -46,3 +69,127 @@ $(document).ready(function() {
         });
     }
 });
+
+function addMarker(evt) {
+    if (!drag_flag) {
+        // hack - remove any existing markers (we only need one)
+        removeAllMarkers()
+        
+        var posClick = map.getLonLatFromViewPortPx(evt.xy);
+        var ptClick = map.getLonLatFromViewPortPx(evt.xy);
+
+        // update form inputs with easting and northing
+        $('input[name="report_northing"]').val(ptClick.lat)
+        $('input[name="report_easting"]').val(ptClick.lon)
+      
+        // add marker with default icon
+        var marker = map.createMarker(posClick);
+        marker.events.register('click', marker, removeMarkerClick);
+        markers.push(marker);
+      
+        // Stop event propagating
+        
+        OpenLayers.Event.stop(evt);
+    }
+    if (map_dragged_flag) {
+        map_dragged_flag = 0;
+    }
+    if (marker_delete_flag) {
+        marker_delete_flag = 0;
+    }
+    if (drag_flag) {
+        drag_flag = 0;
+    }
+}
+
+function touchAddMarker(evt) {
+  
+// Adds a Touch marker
+  
+  if (!first_use_flag) {
+      if (!marker_delete_flag && !drag_flag && !map_dragged_flag) {
+
+          var ptTouch = osMap.getLonLatFromViewPortPx(evt.xy);
+          var lonlatTouch = gridProjection.getLonLatFromMapPoint(ptTouch);
+
+        // update form inputs with easting and northing
+        $('input[name="report_northing"]').val(ptClick.lat)
+        $('input[name="report_easting"]').val(ptClick.lon)
+
+// Add a marker with default icon
+        
+          var marker = osMap.createMarker(lonlatTouch);
+          marker.events.register('touchend', marker, removeMarkerTouch);
+          markers.push(marker);
+
+ // Stop event propagating  
+        
+          OpenLayers.Event.stop(evt);
+      }
+    
+// Resets flags if delete or drag map event occurs and this event is triggered at Touch
+// End of the other events
+      if (map_dragged_flag) {
+          map_dragged_flag = 0;
+      }
+      if (marker_delete_flag) {
+          marker_delete_flag = 0;
+      }
+  } else {
+      first_use_flag = 0;
+  }
+}
+
+function setMapDrag(evt) {
+  
+// Sets flag so that add marker, delete marker will not be triggered at the end of the event.
+  
+  map_dragged_flag = 1;
+}
+
+function removeMarkerClick(evt) {
+  
+// Remove this marker
+  
+    if (!drag_flag ) {
+
+        map.removeMarker(this);
+        marker_delete_flag = 0;
+
+        $('input[name="report_northing"]').val('')
+        $('input[name="report_easting"]').val('')
+      
+// Stop event propagating
+      
+        OpenLayers.Event.stop(evt);
+    }
+}
+
+function removeMarkerTouch(evt) {
+  
+// Remove this marker
+  
+    if (!drag_flag && !map_dragged_flag) {
+
+        osMap.removeMarker(this);
+
+        $('input[name="report_northing"]').val('')
+        $('input[name="report_easting"]').val('')
+
+    }
+  
+// Stop event propagating
+  
+    OpenLayers.Event.stop(evt);
+}
+
+function removeAllMarkers() {
+  
+// Remove all markers
+  
+    map.clearMarkers();
+
+// And remove all markers from the list
+  
+    markers = [];
+}

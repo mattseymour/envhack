@@ -82,6 +82,7 @@ $(document).ready(function() {
                         $('#query_fid')[0].innerHTML = 'Report for incident number ' + e.object.fid + '.';
                         $('#query_date')[0].innerHTML = 'Incident reported on ' + fc.features[e.object.fid].properties['NOT_DATE'] + '.';
                         $('#query_severity')[0].innerHTML = 'This incident was classified as ' + fc.features[e.object.fid].properties['EIL_WATER'] + '.';
+                        $('#query_vote')[0].innerHTML = '';
                         $('#content').fadeIn(250);
                     });
                     OpenLayers.Event.stop(e);
@@ -112,6 +113,31 @@ $(document).ready(function() {
             }
         });
     }
+
+    // add user submitted incidents
+    $.getJSON('/data/', function(data) {
+        user_submitted_data = data;
+        var size = new OpenLayers.Size(33,45);
+        var icon_grey = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_grey.png', size);
+        for(n=0;n<data.length;n++) {
+            ico = icon_grey.clone();
+            marker = new OpenLayers.Marker(new OpenSpace.MapPoint(data[n].x,data[n].y),ico);
+            marker.fid = n;
+            markers_layer.addMarker(marker);
+
+            // onclick method for markers
+                marker.events.register('click', marker, function (e) {
+                    $('#content').fadeOut(250, function() {
+                        $('#query_fid')[0].innerHTML = 'User submitted report number ' + e.object.fid + '.';
+                        $('#query_date')[0].innerHTML = 'Incident reported on ' + user_submitted_data[e.object.fid]['date'] + '.';
+                        $('#query_severity')[0].innerHTML = '';
+                        $('#query_vote')[0].innerHTML = '<a href="#" class="voter">Vote for this incident.';
+                        $('#content').fadeIn(250);
+                    });
+                    OpenLayers.Event.stop(e);
+                });
+        }
+    });
 });
 
 function processLocation(location) {
@@ -138,6 +164,11 @@ function processLocation(location) {
             }
         });
 
+    // update form inputs with easting and northing
+    var pos = gridProjection.getMapPointFromLonLat(lonlat);
+    console.log(pos);
+    $('input[name="report_northing"]').val(parseInt(pos.lat));
+    $('input[name="report_easting"]').val(parseInt(pos.lon));
     //alert(location.coords.latitude);
     //alert(location.coords.longitude);
     //alert(location.coords.accuracy);
@@ -152,8 +183,8 @@ function addMarker(evt) {
         var ptClick = map.getLonLatFromViewPortPx(evt.xy);
 
         // update form inputs with easting and northing
-        $('input[name="report_northing"]').val(ptClick.lat)
-        $('input[name="report_easting"]').val(ptClick.lon)
+        $('input[name="report_northing"]').val(parseInt(ptClick.lat))
+        $('input[name="report_easting"]').val(parseInt(ptClick.lon))
       
         // add marker with default icon
         var marker = map.createMarker(posClick);
@@ -186,8 +217,8 @@ function touchAddMarker(evt) {
           var lonlatTouch = gridProjection.getLonLatFromMapPoint(ptTouch);
 
         // update form inputs with easting and northing
-        $('input[name="report_northing"]').val(ptClick.lat)
-        $('input[name="report_easting"]').val(ptClick.lon)
+        $('input[name="report_northing"]').val(parseInt(ptClick.lat))
+        $('input[name="report_easting"]').val(parseInt(ptClick.lon))
 
 // Add a marker with default icon
         

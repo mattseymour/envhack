@@ -125,6 +125,13 @@ function processLocation(location) {
     marker.events.register('click', marker, removeMarkerClick);
     markers.push(marker);
     markerLayer.addMarker(marker);
+
+    // update form inputs with easting and northing
+    var pos = gridProjection.getMapPointFromLonLat(lonlat);
+    console.log(pos);
+    $('input[name="report_northing"]').val(parseInt(pos.lat));
+    $('input[name="report_easting"]').val(parseInt(pos.lon));
+
     //alert(location.coords.latitude);
     //alert(location.coords.longitude);
     //alert(location.coords.accuracy);
@@ -139,8 +146,8 @@ function addMarker(evt) {
         var ptClick = map.getLonLatFromViewPortPx(evt.xy);
 
         // update form inputs with easting and northing
-        $('input[name="report_northing"]').val(ptClick.lat)
-        $('input[name="report_easting"]').val(ptClick.lon)
+        $('input[name="report_northing"]').val(parseInt(ptClick.lat))
+        $('input[name="report_easting"]').val(parseInt(ptClick.lon))
       
         // add marker with default icon
         var marker = map.createMarker(posClick);
@@ -173,8 +180,8 @@ function touchAddMarker(evt) {
           var lonlatTouch = gridProjection.getLonLatFromMapPoint(ptTouch);
 
         // update form inputs with easting and northing
-        $('input[name="report_northing"]').val(ptClick.lat)
-        $('input[name="report_easting"]').val(ptClick.lon)
+        $('input[name="report_northing"]').val(parseInt(ptClick.lat))
+        $('input[name="report_easting"]').val(parseInt(ptClick.lon))
 
 // Add a marker with default icon
         

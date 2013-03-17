@@ -8,6 +8,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'app.views.home', name='home'),
+    url(r'data/$', 'app.views.data', name='data'),
     url(r'^submit/$', 'app.views.submission', name='submission'),
     url(r'^view/$', 'app.views.view', name='view'),
     url(r'^import/$', 'app.views.importer', name='import'),

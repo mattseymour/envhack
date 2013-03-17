@@ -18,9 +18,7 @@ class Report(models.Model):
     report_easting = models.IntegerField()
     photo = models.ImageField(upload_to=os.path.join('media'), blank=True)
     waterway_name = models.CharField(max_length=100)
-
-    def __unicode__(self):
-        return '{0} on {1}'.format(self.reporter_name, self.submission_date)
+    description = models.CharField(max_length=140)
 
 class ReportVote(models.Model):
     report = models.ForeignKey(Report)

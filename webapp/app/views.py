@@ -54,7 +54,7 @@ def data(request):
     _list = Report.objects.all()[:100]
     _l = []
     for i in _list:
-         j = {'description':i.description,'report_type':i.report_type, 'y':i.report_northing, 'x':i.report_easting}
+         j = {'wildlife':i.danger_wildlife, 'boat': i.danger_boat, 'human':i.danger_person ,'description':i.description,'report_type':i.report_type, 'y':i.report_northing, 'x':i.report_easting}
          _l.append(j)
     return HttpResponse(json.dumps(_l), mimetype='application/json')
 

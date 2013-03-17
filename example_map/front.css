@@ -1,0 +1,25 @@
+#container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
+#report, #view {
+    text-align: center;
+	margin: 30px;
+    padding: 15px;
+	font-family: Helvetica, sans-serif;
+	font-size: 2em;
+    border: solid 2px #ccc;
+    border-radius: 5px;
+}
+
+#report {
+    
+}
+
+#report a, #view a {
+    color: #000;
+    text-decoration: none;
+
+}

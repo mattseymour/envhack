@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script type="text/javascript" src="http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/openspace.js?key=43659536296237352656577659934363"></script>
+<script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.8.3.min.js"></script>
+<style type="text/css">
+#map {
+   height: 600px;
+    width: 100%;
+}
+
+#content {
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-family: sans-serif;
+}
+
+.hack {
+    color: #a9e100;
+}
+
+#report {
+    padding-top: 50px;
+}
+
+h2 {
+    font-family: sans-serif;
+    font-size: 1em;
+}
+
+.incident {
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
+    height: 80px;
+}
+
+.vote {
+    float: right;
+    width: 50px;
+    height: 50px;
+}
+</style>
+{% endblock header %}
+
+{% block content %}
+    <div id="map"></div>
+    <script src="{{STATIC_URL}}js/data.geojson.js"></script>
+    <script src="{{STATIC_URL}}js/map.js"></script>
+    <div><h2>Existing pollution incidents</h2></div>
+    <div id="content">
+        <div id="query_fid"></div>
+        <div id="query_date"></div>
+        <div id="query_severity"></div>
+    </div>
+    <div class="incident"><div class="vote" style="background-color: yellow"></div>some text<br />omg</div>
+    <div class="incident"><div class="vote"  style="background-color: blue"></div>dssdfgdhsfg<br />something else</div>
+{% endblock content %}

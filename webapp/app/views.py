@@ -15,6 +15,9 @@ def thanks(request):
 def home(request):
     return render_to_response('home/index.html', {}, context_instance=RequestContext(request))
 
+def view(request):
+    return render_to_response('home/map.html', {}, context_instance=RequestContext(request))
+
 def submission(request):
     report_form = ReportForm()
     if request.method == 'POST':

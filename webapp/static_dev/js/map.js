@@ -7,31 +7,40 @@ var markers = [];
 var gridProjection = new OpenSpace.GridProjection();
 var markersLayer;
 
+try {
+    if (page) {}
+} catch(e) {
+    page = 'unknown'
+}
+
 $(document).ready(function() {
     // create the map, and zoom to envhack
 	map = new OpenSpace.Map('map');
 	var envhack = new OpenSpace.MapPoint(358206, 173144);
-	map.setCenter(envhack, 7);
+	map.setCenter(envhack, 5);
 
     // create a new layer for the markers
     markers_layer = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(markers_layer);
 
-    map.events.remove('dblclick');
-    map.events.register("movestart", this, this.setMapDrag);
-    map.events.register("dblclick", this, addMarker);
-    map.events.register("touchend", this, this.touchAddMarker);
+    if (page == 'report') {
+        map.events.remove('dblclick');
+        map.events.register("movestart", this, this.setMapDrag);
+        map.events.register("dblclick", this, addMarker);
+        map.events.register("touchend", this, this.touchAddMarker);
 
-    dragControl = new OpenSpace.Control.DragMarkers(markersLayer);
-    map.addControl(dragControl);
+        dragControl = new OpenSpace.Control.DragMarkers(markersLayer);
+        map.addControl(dragControl);
 
-    markersLayer = map.getMarkerLayer();
+        markersLayer = map.getMarkerLayer();
 
-    // submit report overlay
-    screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
-    screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
-    map.addLayer(screenOverlay);
-    screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker identifying the pollution location.</div>");
+        // submit report overlay
+        screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
+        screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
+        map.addLayer(screenOverlay);
+        screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker identifying the pollution location.</div>");
+
+    }
 
     // icons
     var size = new OpenLayers.Size(33,45);

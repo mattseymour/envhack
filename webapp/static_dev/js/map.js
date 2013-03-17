@@ -89,6 +89,29 @@ $(document).ready(function() {
                 });
             }
         }
+
+        // add user submitted incidents
+        $.getJSON('/data/', function(data) {
+            user_submitted_data = data;
+            var icon_grey = new OpenLayers.Icon('http://osopenspacepro.ordnancesurvey.co.uk/osmapapi/img_versions/img_4.0.0/OS/images/markers/marker_grey.png', size);
+            for(n=0;n<data.length;n++) {
+                ico = icon_grey.clone();
+                marker = new OpenLayers.Marker(new OpenSpace.MapPoint(data[n].x,data[n].y),ico);
+                marker.fid = n;
+                markers_layer.addMarker(marker);
+
+                // onclick method for markers
+                marker.events.register('click', marker, function (e) {
+                    $('#content').fadeOut(250, function() {
+                        $('#query_fid')[0].innerHTML = 'Report for incident number ' + e.object.fid + '.';
+                        $('#query_date')[0].innerHTML = 'Incident reported on ' + user_submitted_data[e.object.fid]['date'] + '.';
+                        $('#query_severity')[0].innerHTML = '';
+                        $('#content').fadeIn(250);
+                    });
+                    OpenLayers.Event.stop(e);
+                });
+            }
+        });
     }
 
     // add user submitted incidents
@@ -131,7 +154,6 @@ function processLocation(location) {
     console.log(pos);
     $('input[name="report_northing"]').val(parseInt(pos.lat));
     $('input[name="report_easting"]').val(parseInt(pos.lon));
-
     //alert(location.coords.latitude);
     //alert(location.coords.longitude);
     //alert(location.coords.accuracy);

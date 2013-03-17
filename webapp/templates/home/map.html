@@ -5,7 +5,7 @@
 <script type="text/javascript" src="{{STATIC_URL}}js/jquery-1.8.3.min.js"></script>
 <style type="text/css">
 #map {
-   height: 600px;
+   height: 500px;
     width: 100%;
 }
 
@@ -25,11 +25,6 @@ h1 {
     padding-top: 50px;
 }
 
-h2 {
-    font-family: sans-serif;
-    font-size: 1em;
-}
-
 .incident {
     border-top: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
@@ -45,11 +40,12 @@ h2 {
 {% endblock header %}
 
 {% block content %}
+    <h2>Existing pollution incidents</h2>
+    <p>The map below shows existing pollution incidents. Click on a marker to display more information below.</p>
     <div id="map"></div>
-    <script type="text/javascript">page = 'view';</script>
-    <script src="{{STATIC_URL}}js/data.geojson.js"></script>
+    <script type="text/javascript">page = 'view';</script><!-- I'm so sorry for this... -->
+    <script src="{{STATIC_URL}}js/data.geojson.js"></script><!-- ... and this... -->
     <script src="{{STATIC_URL}}js/map.js"></script>
-    <div><h2>Existing pollution incidents</h2></div>
     <div id="content">
         <div id="query_fid"></div>
         <div id="query_date"></div>

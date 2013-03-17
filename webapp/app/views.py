@@ -10,10 +10,6 @@ import json
 class GeoJson:
     pass
 
-def recent(request):
-    _recent = Report.objects.all().orderby('-submission_date')[:15]
-    return render_to_response('home/recent.html', {'recent': _recent}, context_instance=RequestContext(request))
-
 def thanks(request):
     return render_to_response('home/thanks.html', {}, context_instance=RequestContext(request))
 

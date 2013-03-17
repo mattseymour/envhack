@@ -1,6 +1,6 @@
 from historicIncidents.models import HistoricIncident
 import csv
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.http import HttpResponse, Http404
 from incidents.forms import ReportForm
@@ -8,6 +8,9 @@ import json
 
 class GeoJson:
     pass
+
+def thanks(request):
+    return render_to_response('home/thanks.html', {}, context_instance=RequestContext(request))
 
 def home(request):
     return render_to_response('home/index.html', {}, context_instance=RequestContext(request))
@@ -18,13 +21,10 @@ def view(request):
 def submission(request):
     report_form = ReportForm()
     if request.method == 'POST':
-        report_form = ReportForm(request.POST)
+        report_form = ReportForm(request.POST, request.FILES)
         if report_form.is_valid():
             obj = report_form.save()
-            if obj.id:
-                return redirect('/thanks/?redirect=true')
-            else:
-                raise Http404
+            return redirect('/thanks/?redirect=true')
 
     return render_to_response('home/submission.html', 
                         { 'form':report_form }, 

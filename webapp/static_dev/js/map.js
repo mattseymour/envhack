@@ -34,11 +34,11 @@ $(document).ready(function() {
 
         markersLayer = map.getMarkerLayer();
 
-        // submit report overlay
-        screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
-        screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
-        map.addLayer(screenOverlay);
-        screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker.</div>");
+        // // submit report overlay
+        // screenOverlay = new OpenSpace.Layer.ScreenOverlay("coords");
+        // screenOverlay.setPosition(new OpenLayers.Pixel(400, 10));
+        // map.addLayer(screenOverlay);
+        // screenOverlay.setHTML("<div style=\"padding: 3px; width: 290px; text-align: right; height=75px; color:black; background-color: white; font-size: 15px\">Double click the map to add a marker.</div>");
 
     } else if(page == 'view') {
 
